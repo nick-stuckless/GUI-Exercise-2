@@ -10,6 +10,7 @@ from tkinter import ttk, Tk, PhotoImage
 import os
 import ctypes
 import poke_api
+import image_lib
 
 # Get the script and images directory
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -56,13 +57,26 @@ def select_pokemon(event):
         photo["file"] = image_path
         img_label["image"] = photo
         img_label["text"] = ""
-        #reenable button
+        desktop_but.state(['!disabled'])
     else:
         img_label["text"] = "No artwork available"
         img_label["image"] = None
         pass
 
 poke_cbox.bind("<<ComboboxSelected>>", select_pokemon)
+
+def set_desktop():
+    pokemon = poke_cbox.get()
+    image_path = os.path.join(images_dir, pokemon)
+
+    
+    image_lib.set_desktop_background_image(image_path)
+
+desktop_but = ttk.Button(frame, text="Set Desktop Image", command=set_desktop)
+desktop_but.grid(row=3, column=0)
+desktop_but.state(['disabled'])
+
+
     
 
 root.mainloop()
