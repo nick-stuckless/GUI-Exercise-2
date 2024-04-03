@@ -1,6 +1,13 @@
 '''
-Library for interacting with the PokeAPI.
+Description: Library for interacting with the PokeAPI.
 https://pokeapi.co/
+Fetches information from the Poke API
+
+Usage:
+poke_api.py "param1"
+
+Params:
+Param1: Name of a pokemon
 '''
 import requests
 import image_lib
@@ -51,14 +58,22 @@ def get_pokemon_info(pokemon):
 
     # TODO: Define function that gets a list of all Pokemon names from the PokeAPI
 def get_pokemon_names():
-    print("Getting list of pokemon names...", end='')
+    """Gets all pokemon names from pokemon API
 
+    Args:
+        None
+
+    Returns:
+        List of pokemon names
+    """
+    print("Getting list of pokemon names...", end='')
+    #Gets pokemon names from a dictionary
     params = {
         "limit": 2000,
         "offset":0,
     }
     respo = requests.get(POKE_API_URL, params=params)
-
+    # Filters dict to return names
     if respo.status_code == requests.codes.ok:
         print('success')
         # Return dictionary of Pokemon info
@@ -73,10 +88,18 @@ def get_pokemon_names():
 
     # TODO: Define function that downloads and saves Pokemon artwork
 def get_pokemon_art(pokemon, image_dir):
+    """Downloads and saves the art of your selected pokemon.
+
+    Args:
+        pokemon (str): Pokemon name (or Pokedex number), image_dir (str): directory that images will be stored in
+
+    Returns:
+        image path
+    """
     poke_info = get_pokemon_info(pokemon)
     if not poke_info:
         return
-    
+    # Fetches pokemon art url
     art_url = poke_info["sprites"]["other"]["official-artwork"]["front_default"]
     if not art_url:
         print(f"No artwork found for {pokemon}")
@@ -87,18 +110,16 @@ def get_pokemon_art(pokemon, image_dir):
     if os.path.isfile(path):
         print(f"{pokemon}'s artwork already exists")
         return path
-
+    # Filters image extension from url
 
     image = image_lib.download_image(art_url)
     if not image:
         return
     
-    #file_ext = art_url.split(".")[-1]
-    #path = os.path.join(image_dir, f"{pokemon}.{file_ext}")
     if image_lib.save_image_file(image, path):
         return path
-
-    return
+    # Downloads and saves file to image cache
+    #return
 
 if __name__ == '__main__':
     main()
