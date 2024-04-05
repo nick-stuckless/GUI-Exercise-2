@@ -67,9 +67,7 @@ poke_cbox.bind("<<ComboboxSelected>>", select_pokemon)
 
 def set_desktop():
     pokemon = poke_cbox.get()
-    #image_path = os.path.join(images_dir, pokemon)
     image_path = poke_api.get_pokemon_art(pokemon, images_dir)
-    
     image_lib.set_desktop_background_image(image_path)
 
 desktop_but = ttk.Button(frame, text="Set Desktop Image", command=set_desktop)
